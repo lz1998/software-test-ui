@@ -12,7 +12,8 @@
                     :items-per-page="10"
                     :items="dataPage.content || []">
                 <template v-slot:item.actions="{ item }">
-                    <v-btn color="primary" @click="handleEditTestClick(item)" small>编辑</v-btn>
+                    <v-btn class="mx-2" color="primary" @click="handleEditTestClick(item)" small>编辑</v-btn>
+                    <v-btn class="mx-2" color="error" @click="handleDeleteTest(item)" small>删除</v-btn>
                 </template>
             </v-data-table>
 
@@ -47,7 +48,10 @@
                 </v-card-actions>
                 <v-card-actions class="mt-4">
                     <v-spacer/>
-                    <v-btn @click="handleGenerateCode" color="warning">生成代码</v-btn>
+                    <v-btn color="warning" depressed v-clipboard:copy="generatedCode"
+                           v-clipboard:success="handleCopySuccess">生成代码
+                    </v-btn>
+<!--                    <v-btn @click="handleGenerateCode" color="warning">生成代码</v-btn>-->
                     <v-btn @click="handleSaveTest" color="success">保存</v-btn>
                 </v-card-actions>
             </v-card>
@@ -75,6 +79,12 @@
                         text: 'testName',
                         align: 'center',
                         value: 'testName',
+                        sortable: false
+                    },
+                    {
+                        text: 'description',
+                        align: 'center',
+                        value: 'description',
                         sortable: false
                     },
                     {
@@ -147,10 +157,18 @@
                     description: this.currentTest.description,
                     testJsonStr: JSON.stringify(this.currentTest.testSteps),
                 }
-                console.log(data)
                 saveTest(data).then(res => {
                     alert("保存成功")
                     this.showTestEditDialog = false
+                    this.handlePageChange()
+                })
+            },
+            handleDeleteTest(item){
+                let data={
+                    testId:item.testId
+                }
+                deleteTest(data).then(res=>{
+                    this.handlePageChange()
                 })
             },
             addNewStep() {
@@ -161,6 +179,20 @@
                 })
             },
             handleGenerateCode() {
+
+
+            },
+            handleCopySuccess(){
+                alert("复制成功")
+            }
+
+
+        },
+        mounted() {
+            this.handlePageChange()
+        },
+        computed:{
+            generatedCode(){
                 let result = ""
                 this.currentTest.testSteps.forEach(step => {
                     if (step["type"] == "input") {
@@ -168,15 +200,10 @@
                     } else if (step["type"] == "click") {
                         result += `\nwebDriver.findElement(By.xpath("${step["xpath"]}")).click();`
                     }
-                    console.log(result)
                 })
-
+                console.log(result)
+                return result
             }
-
-
-        },
-        mounted() {
-            this.handlePageChange()
         }
     }
 </script>
