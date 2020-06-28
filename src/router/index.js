@@ -18,7 +18,7 @@ const routes = [
     {
         path: '/layout',
         name: 'layout',
-        redirect: '/status',
+        redirect: '/testManage',
         component: () => import('@/views/layout/layout.vue'),
         children:menuItems
     }
