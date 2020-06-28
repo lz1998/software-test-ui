@@ -15,14 +15,14 @@
                                         prepend-inner-icon="account_circle"
                                         type="primary"
                                         v-model="loginForm.userId"
-                                        :rules="[formRules.required, formRules.userId]"
+                                        :rules="[formRules.required]"
                                         label="账号"
                                         outlined>
                                 </v-text-field>
                                 <v-text-field
                                         prepend-inner-icon="lock"
                                         v-model="loginForm.password"
-                                        :rules="[formRules.required, formRules.password]"
+                                        :rules="[formRules.required]"
                                         label="密码"
                                         type="password"
                                         outlined>
@@ -104,9 +104,9 @@
             },
             handleLogin() {
                 // 检测是否为空，是否数字
-                if (!this.$refs.loginForm.validate()) {
-                    return
-                }
+                // if (!this.$refs.loginForm.validate()) {
+                //     return
+                // }
                 login(this.loginForm).then(res => {
                     let data = res.data
                     if (data.type == "token") {

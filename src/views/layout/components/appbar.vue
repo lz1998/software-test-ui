@@ -8,7 +8,7 @@
             </v-btn>
 
             <!--标题-->
-            <v-toolbar-title class="toobar-title">Spring-CQ管理系统</v-toolbar-title>
+            <v-toolbar-title class="toobar-title">软件测试实验</v-toolbar-title>
 
             <v-spacer></v-spacer>
             <v-avatar size="28" width="1px">
